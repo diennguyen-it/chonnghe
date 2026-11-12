@@ -1,0 +1,6 @@
+const test=require('node:test'),assert=require('node:assert/strict'),W=require('../src/warmup'),D=require('../src/data');
+const a={interests:[0],hot:2,abilities:[4],parents:[2]};
+test('Bốn câu, chặn thiếu/ngoài phạm vi/trùng lựa chọn',()=>{assert.equal(W.questions.length,4);assert.ok(W.ready(a));for(const bad of [{},{...a,hot:4},{...a,interests:[]},{...a,parents:[1,1]}])assert.equal(W.ready(bad),false);});
+test('Xét toàn bộ ngành, 4 gợi ý hữu hạn và ổn định khi đảo danh mục',()=>{const r=W.rank(a,D);assert.equal(r.length,D.majors.filter(m=>m.type==='nganh'&&m.profile).length);assert.equal(r.slice(0,4).length,4);assert.ok(r.every(x=>Number.isFinite(x.total)&&x.total>=0&&x.total<=100+1e-9));assert.deepEqual(r,W.rank(a,{...D,majors:[...D.majors].reverse()}));});
+test('Đổi sở thích làm đổi gợi ý; độ hot và phụ huynh không áp đặt kết quả',()=>{assert.notDeepEqual(W.rank(a,D).slice(0,4).map(x=>x.major.id),W.rank({...a,interests:[2],abilities:[1]},D).slice(0,4).map(x=>x.major.id));assert.deepEqual(W.rank(a,D),W.rank({...a,hot:0,parents:[0,1]},D));});
+test('11 nhóm đều được đối chiếu, 49 hồ sơ đơn lựa chọn không lỗi',()=>{const groups=new Set();for(let i=0;i<7;i++)for(let n=0;n<7;n++){const r=W.rank({...a,interests:[i],abilities:[n]},D);r.forEach(x=>groups.add(x.major.group));assert.ok(r.every(x=>Number.isFinite(x.total)));}assert.equal(groups.size,11);});
