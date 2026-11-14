@@ -6,6 +6,6 @@
   "scripts": {
     "dev": "python server/server.py --port 4173 --label \"May chu xem truoc - du lieu kiem thu\"",
     "build": "python packaging/build.py",
-    "test": "node --test tests/scoring.test.js tests/charts.test.js tests/warmup.test.js tests/admin.test.js tests/recovery.test.js"
+    "test": "node --test tests/scoring.test.js tests/charts.test.js tests/warmup.test.js tests/admin.test.js tests/recovery.test.js tests/exploration.test.js"
   }
 }

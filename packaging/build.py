@@ -3,8 +3,8 @@ import base64, json
 
 ROOT=Path(__file__).resolve().parents[1]
 template=(ROOT/'src/index.html').read_text()
-out=template.replace('<!-- INLINE_STYLE -->','<style>\n'+(ROOT/'src/style.css').read_text()+'\n'+(ROOT/'src/analytics.css').read_text()+'\n'+(ROOT/'src/admin.css').read_text()+'\n'+(ROOT/'src/brand.css').read_text()+'\n'+(ROOT/'src/survey-stats.css').read_text()+'\n</style>')
-for key,filename in [('DATA','data.js'),('SCORING','scoring.js'),('CHARTS','charts.js'),('ANALYTICS','analytics.js'),('ORGANIZATIONS','organizations.js'),('SUPABASE','supabase.js'),('ADMIN','admin.js'),('STUDENT_REFERENCE','student-reference.js'),('WARMUP','warmup.js'),('APP','app.js')]:
+out=template.replace('<!-- INLINE_STYLE -->','<style>\n'+'\n'.join((ROOT/'src'/name).read_text() for name in ['style.css','analytics.css','admin.css','brand.css','survey-stats.css','exploration.css'])+'\n</style>')
+for key,filename in [('DATA','data.js'),('SCORING','scoring.js'),('CHARTS','charts.js'),('ANALYTICS','analytics.js'),('ORGANIZATIONS','organizations.js'),('SUPABASE','supabase.js'),('ADMIN','admin.js'),('STUDENT_REFERENCE','student-reference.js'),('ADMISSIONS','admissions.js'),('WARMUP','warmup.js'),('APP','app.js')]:
     script=(ROOT/'src'/filename).read_text().replace('</script','<\\/script')
     out=out.replace(f'<!-- INLINE_{key} -->','<script>\n'+script+'\n</script>')
 single=out
